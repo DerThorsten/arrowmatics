@@ -48,4 +48,4 @@ first_pyarrow_array._export_to_c(c_array_ptr)
 print(c_array_ptr)
 print(c_schema_ptr)
 
-arrowmatics.from_py_ptrs(c_schema_ptr, c_array_ptr)
+arrowmatics.print_float_array(c_schema_ptr, c_array_ptr)
