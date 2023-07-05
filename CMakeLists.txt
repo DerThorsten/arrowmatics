@@ -19,3 +19,15 @@ add_custom_command(TARGET _arrowmatics POST_BUILD
                        $<TARGET_FILE:_arrowmatics>
                        ${CMAKE_CURRENT_SOURCE_DIR}/arrowmatics)
 
+
+
+# run pytest from cmake
+add_custom_target(python_tests
+    ${CMAKE_COMMAND}
+    -E env PYTHONPATH=${CMAKE_CURRENT_SOURCE_DIR}
+    ${PYTHON_EXECUTABLE} -m
+    pytest ${CMAKE_CURRENT_SOURCE_DIR}/tests -vvv -s
+    DEPENDS _arrowmatics
+    WORKING_DIRECTORY ${PY_MODULE_DIR}
+    COMMENT "Running pytest"
+    USES_TERMINAL)
