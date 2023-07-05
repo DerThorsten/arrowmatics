@@ -113,13 +113,6 @@ arcticdbproxy::NativeTensor as_native_tensor(
     // create a native tensor object
     arcticdbproxy::NativeTensor native_tensor;
 
-    // std::cout << "schema_ptr->format: " << schema->format << std::endl;
-
-    // std::cout<<"print"<<std::endl;
-    // std::cout<< ArrowArrayViewGetDoubleUnsafe(&array_view, 0)<<std::endl;
-    // std::cout<< ArrowArrayViewGetDoubleUnsafe(&array_view, 1)<<std::endl;
-    // std::cout<< ArrowArrayViewGetDoubleUnsafe(&array_view, 2)<<std::endl;
-
     ArrowBufferView* data_view = &array_view.buffer_views[1];
 
     switch(array_view.storage_type){
@@ -188,11 +181,6 @@ arcticdbproxy::NativeTensor as_native_tensor(
         }
         case NANOARROW_TYPE_DOUBLE:
         {    
-            std::cout<<"here array_view.offset"<<array_view.offset<<"\n";
-            const double * ptr = data_view->data.as_double + array_view.offset;
-            std::cout<<"ptr[0]"<<ptr[0]<<"\n";
-            std::cout<<"ptr[1]"<<ptr[1]<<"\n";
-            std::cout<<"ptr[2]"<<ptr[2]<<"\n";
             native_tensor.dt_ = arcticdbproxy::DataType::FLOAT64;
             native_tensor.ptr = data_view->data.as_double + array_view.offset;
             native_tensor.elsize_ = 8;
@@ -203,12 +191,10 @@ arcticdbproxy::NativeTensor as_native_tensor(
             throw std::runtime_error(std::string("unsupported arrow type: ") + ArrowTypeString(array_view.storage_type));
         }
     }
-    //std::cout<<"dt"<<int(uint8_t(native_tensor.dt_))<<"\n";
     native_tensor.ndim_ = 1;
     native_tensor.nbytes_ = native_tensor.elsize_ * array->length;
     native_tensor.strides_ = {std::size_t(native_tensor.elsize_)};
     native_tensor.shapes_ = {std::size_t(array->length)};
-
     return native_tensor;
 }
 
